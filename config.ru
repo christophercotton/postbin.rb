@@ -1,2 +1,2 @@
-require 'postbin'
+require './postbin'
 run Sinatra::Application
