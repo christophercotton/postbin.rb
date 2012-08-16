@@ -21,7 +21,8 @@ end
 
 post '/:id' do
   store_post(params[:id])
-  haml :post_created, :locals => { :name => params[:id] }
+  #haml :post_created, :locals => { :name => params[:id] }
+  ["OK", params[:id]].to_json
 end
 
 
