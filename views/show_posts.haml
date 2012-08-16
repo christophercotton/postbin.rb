@@ -28,17 +28,27 @@
         
       %pre= h post[:data]
       
-      %a{:href=>"#", :id=>"headers_link_#{post_id}", :onClick=>"$('#headers_#{post_id}').show();$('#headers_link_#{post_id}').hide();return false;"} Show headers
+      %a{:href=>"#", :id=>"headers_link_#{post_id}", :onClick=>"$('#headers_#{post_id}').show();$('#headers_link_#{post_id}').hide();return false;"} HTTP headers
       .headers(id="headers_#{post_id}")
-        .title Headers
+        .title HTTP Headers
         %ul
           - post[:headers].each_pair do |k, v|
             %li
               .key= k
               .value= v
       
+      - unless post[:other_headers].nil?
+        %a{:href=>"#", :id=>"other_headers_link_#{post_id}", :onClick=>"$('#other_headers_#{post_id}').show();$('#other_headers_link_#{post_id}').hide();return false;"} Other Headers
+        .headers(id="other_headers_#{post_id}")
+          .title Other Headers
+          %ul
+            - post[:other_headers].each_pair do |k, v|
+              %li
+                .key= k
+                .value= v
+
       - unless post[:json].nil?
-        %a{:href=>"#", :id=>"json_link_#{post_id}", :onClick=>"$('#json_#{post_id}').show();$('#json_link_#{post_id}').hide();return false;"} Show JSON
+        %a{:href=>"#", :id=>"json_link_#{post_id}", :onClick=>"$('#json_#{post_id}').show();$('#json_link_#{post_id}').hide();return false;"} JSON
         .json(id="json_#{post_id}")
           %pre= h post[:json]
 

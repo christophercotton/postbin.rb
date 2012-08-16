@@ -55,7 +55,7 @@ def store_post(name)
     rescue
     end
   end
-  @@storage[name][:posts] << { :data=>data, :time=>Time.now, :headers=>request.http_headers, :content_type=>request.content_type, :json => json }
+  @@storage[name][:posts] << { :data=>data, :time=>Time.now, :headers=>request.http_headers, :content_type=>request.content_type, :json => json, :other_headers => request.non_http_headers }
   @@storage
   # debugger
 end
@@ -74,6 +74,11 @@ class Sinatra::Request
   def http_headers
     out = env.clone
     out.delete_if { |k,v| !k.match(/^HTTP_/) }
+    out
+  end
+  def non_http_headers
+    out = env.clone
+    out.delete_if { |k,v| k.match(/^HTTP_/) }
     out
   end
 end
