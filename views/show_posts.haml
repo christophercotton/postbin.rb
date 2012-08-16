@@ -36,6 +36,11 @@
             %li
               .key= k
               .value= v
+      
+      - unless post[:json].nil?
+        %a{:href=>"#", :id=>"json_link_#{post_id}", :onClick=>"$('#json_#{post_id}').show();$('#json_link_#{post_id}').hide();return false;"} Show JSON
+        .json(id="json_#{post_id}")
+          %pre= h post[:json]
 
 %p
   This page will auto-refresh every
