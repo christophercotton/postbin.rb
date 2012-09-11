@@ -3,6 +3,7 @@ require 'sinatra'
 require 'haml'
 require 'sass'
 require 'digest/md5'
+require 'json'
 
 get '/' do
   purge_old_postbins
@@ -20,7 +21,8 @@ end
 
 post '/:id' do
   store_post(params[:id])
-  haml :post_created, :locals => { :name => params[:id] }
+  #haml :post_created, :locals => { :name => params[:id] }
+  ["OK", params[:id]].to_json
 end
 
 
@@ -46,7 +48,15 @@ def store_post(name)
   @@storage[name] ||= {}
   @@storage[name][:posts] ||= []
   @@storage[name][:last_post_at] = Time.now
-  @@storage[name][:posts] << { :data=>request.body.read, :time=>Time.now, :headers=>request.http_headers }
+  json = nil
+  data = request.body.read
+  if request.content_type == "application/json"
+    begin
+      json = ::JSON.pretty_generate( ::JSON.parse data )
+    rescue
+    end
+  end
+  @@storage[name][:posts] << { :data=>data, :time=>Time.now, :headers=>request.http_headers, :content_type=>request.content_type, :json => json, :other_headers => request.non_http_headers }
   @@storage
   # debugger
 end
@@ -65,6 +75,11 @@ class Sinatra::Request
   def http_headers
     out = env.clone
     out.delete_if { |k,v| !k.match(/^HTTP_/) }
+    out
+  end
+  def non_http_headers
+    out = env.clone
+    out.delete_if { |k,v| k.match(/^HTTP_/) }
     out
   end
 end

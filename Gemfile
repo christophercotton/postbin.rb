@@ -1,3 +1,5 @@
 source 'http://rubygems.org'
 gem 'sinatra'
+gem 'sass'
 gem 'haml'
+gem 'json'
